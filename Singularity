@@ -27,8 +27,6 @@ From: ubuntu:16.10
 
 %post
     # Runs within the container during Bootstrap
-    env
-    env | grep proxy | true
 
     # Install the commonly used packages (from repo)
     apt-get update && apt-get install -y --no-install-recommends \
@@ -83,25 +81,22 @@ From: ubuntu:16.10
     # git, wget
     apt-get install -y git wget
     # LMod
-    apt-get install -y liblua5.1-0 liblua5.1-0-dev lua-filesystem-dev lua-filesystem lua-posix-dev lua-posix lua5.1
+    apt-get install -y liblua5.1-0 liblua5.1-0-dev lua-filesystem-dev lua-filesystem lua-posix-dev lua-posix lua5.1 tcl tcl-dev lua-term lua-term-dev lua-json
 
-#   Singularity inherits hosts environment = all LMod environment variables
-#   to get LMod in the container, we have to build it using the container
-#   in the sys branch, and then user has to have this in ~/.custom.sh
-#export OSVER=`lsb_release -r | awk '{ print $2; }'`
-#export OSREL=`lsb_release -i | awk '{ print $3; }'`
-#
-#if [ -n "$SINGULARITY_CONTAINER" ] && [ -n "$SINGULARITY_MOD" ]; then
-#  if [ $OSREL == "CentOS" ]; then # assume only CentOS7
-#    source /uufs/chpc.utah.edu/sys/installdir/lmod/7.1.6-c7/init/bash
-#  elif [ $OSREL == "Ubuntu" ]; then # assume only Ubuntu 16
-#    source /uufs/chpc.utah.edu/sys/modulefiles/scripts/clear_lmod.sh
-#    source /uufs/chpc.utah.edu/sys/installdir/lmod/7.4-u16/init/profile
-#  fi
-#fi
     echo "
-export SINGULARITY_MOD=1
-    " >> /environment
+if [ -f /uufs/chpc.utah.edu/sys/etc/profile.d/module.sh ]
+then
+   . /uufs/chpc.utah.edu/sys/etc/profile.d/module.sh
+fi
+   " > /etc/profile.d/91-chpc.sh
+
+    echo "
+. /etc/profile.d/91-chpc.sh
+" >> /etc/bash.bashrc
+
+%environment    
+PATH=/usr/local/bin:$PATH
+LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 %test
     # Sanity check that the container is operating
