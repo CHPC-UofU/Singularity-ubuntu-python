@@ -1,8 +1,7 @@
-# Defines a base Ubuntu 16 Singularity container with basic Python packages
+# A base Ubuntu 16 Singularity container with basic Python packages
 # uses pip to install numpy so it detects and takes advantage of OpenBLAS
 # OpenBLAS is optimized for multiple CPU archs, on par with MKL for SSE and AVX 
 # and about 30% slower for AVX2
-
 
 # bootstraping from docker image is faster and includes more dependencies
 BootStrap: docker
@@ -14,6 +13,9 @@ From: ubuntu:16.10
 #MirrorURL: http://us.archive.ubuntu.com/ubuntu/
 #Include: rpm2cpio
 
+%help
+A base Ubuntu 16 Singularity container with basic Python packages such as NumPy and SciPy with OpenBLAS
+Run as "ubuntu_python.simg [arguments]" which is equivalent to running "python [arguments]"
 
 %runscript
     echo "Arguments received: $*"
