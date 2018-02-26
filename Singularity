@@ -5,7 +5,7 @@
 
 # bootstraping from docker image is faster and includes more dependencies
 BootStrap: docker
-From: ubuntu:16.10
+From: ubuntu:16.04
 
 # alternatively we can bootstrap directly from the repo, but installation will be longer
 #BootStrap: debootstrap
@@ -41,6 +41,7 @@ Run as "ubuntu_python.simg [arguments]" which is equivalent to running "python [
         libfreetype6-dev \
         libpng-dev \
         libzmq3-dev \
+        locales \
         python-pip \
         pkg-config \
         python-dev \
